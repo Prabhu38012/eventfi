@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "283551460018",
+    "project_id": "eventfi-app-1f365",
+    "storage_bucket": "eventfi-app-1f365.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283551460018:android:09d74f01135df828c737ab",
+        "android_client_info": {
+          "package_name": "com.example.eventfi_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "283551460018-qhskuboksfjmcn0dgjvevmuuh8rid433.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJa-FkhAmNFMILT8JoPC-L3ap6ae2UzaI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "283551460018-qhskuboksfjmcn0dgjvevmuuh8rid433.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

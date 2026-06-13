@@ -1,0 +1,47 @@
+# ─────────────────────────────────────────────────────────────
+#  EventFi .gitignore
+# ─────────────────────────────────────────────────────────────
+
+# ─── Environment Files (NEVER commit these) ──────────────────
+.env
+*.env
+!.env.example
+
+# ─── Flutter / Dart ──────────────────────────────────────────
+eventfi_app/build/
+eventfi_app/.dart_tool/
+eventfi_app/.flutter-plugins
+eventfi_app/.flutter-plugins-dependencies
+eventfi_app/.packages
+eventfi_app/pubspec.lock
+eventfi_app/android/.gradle/
+eventfi_app/android/local.properties
+eventfi_app/android/key.properties
+eventfi_app/ios/Pods/
+eventfi_app/ios/.symlinks/
+eventfi_app/ios/Flutter/.last_build_id
+eventfi_app/*.g.dart
+eventfi_app/firebase_options.dart
+
+# ─── Node.js ─────────────────────────────────────────────────
+eventfi_backend/node_modules/
+eventfi_backend/logs/
+eventfi_backend/*.log
+npm-debug.log*
+
+# ─── Python ──────────────────────────────────────────────────
+eventfi_ai/venv/
+eventfi_ai/__pycache__/
+eventfi_ai/*.pyc
+eventfi_ai/*.pyo
+eventfi_ai/.pytest_cache/
+eventfi_ai/models/*.pkl
+eventfi_ai/models/*.joblib
+
+# ─── OS Files ────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ─── VS Code ─────────────────────────────────────────────────
+.vscode/settings.json
+.vscode/launch.json
