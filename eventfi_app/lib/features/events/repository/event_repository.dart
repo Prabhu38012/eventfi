@@ -24,25 +24,25 @@ class EventRepository {
     if (search   != null && search.isNotEmpty) params['search'] = search;
 
     final res = await _dio.get(ApiEndpoints.events, queryParameters: params);
-    return (res.data['events'] as List)
+    return (res.data['data']['events'] as List)
         .map((e) => EventModel.fromJson(e))
         .toList();
   }
 
   Future<List<EventModel>> getTrending() async {
     final res = await _dio.get(ApiEndpoints.trending);
-    return (res.data['events'] as List)
+    return (res.data['data']['events'] as List)
         .map((e) => EventModel.fromJson(e))
         .toList();
   }
 
   Future<EventModel> getEventById(String id) async {
     final res = await _dio.get(ApiEndpoints.eventById(id));
-    return EventModel.fromJson(res.data['event']);
+    return EventModel.fromJson(res.data['data']['event']);
   }
 
   Future<List<String>> getDistricts() async {
     final res = await _dio.get('${ApiEndpoints.events}/districts');
-    return List<String>.from(res.data['districts'] ?? []);
+    return List<String>.from(res.data['data']['districts'] ?? []);
   }
 }
