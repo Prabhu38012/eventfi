@@ -5,6 +5,7 @@ import 'core/theme/app_theme.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/home/providers/home_provider.dart';
 import 'features/booking/providers/booking_provider.dart';
+import 'features/points/providers/points_provider.dart';
 
 class EventFiApp extends StatelessWidget {
   const EventFiApp({super.key});
@@ -15,8 +16,11 @@ class EventFiApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => BookingProvider()),  // ✅ Phase 4
-        // Phase 5: ChangeNotifierProvider(create: (_) => PointsProvider()),
+        ChangeNotifierProvider(create: (_) => BookingProvider()),
+        ChangeNotifierProvider(create: (_) => PointsProvider()),   // ✅ Phase 5
+        // Phase 6: ChangeNotifierProvider(create: (_) => WishlistProvider()),
+        // Phase 6: ChangeNotifierProvider(create: (_) => ReviewProvider()),
+        // Phase 6: ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: MaterialApp.router(
         title:                      'EventFi',
