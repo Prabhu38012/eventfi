@@ -4,6 +4,7 @@ import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/home/providers/home_provider.dart';
+import 'features/booking/providers/booking_provider.dart';
 
 class EventFiApp extends StatelessWidget {
   const EventFiApp({super.key});
@@ -13,8 +14,8 @@ class EventFiApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => HomeProvider()),  // ✅ Phase 2
-        // Phase 4: ChangeNotifierProvider(create: (_) => BookingProvider()),
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => BookingProvider()),  // ✅ Phase 4
         // Phase 5: ChangeNotifierProvider(create: (_) => PointsProvider()),
       ],
       child: MaterialApp.router(

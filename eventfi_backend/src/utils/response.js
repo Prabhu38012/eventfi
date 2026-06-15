@@ -10,4 +10,19 @@ const error = (message = 'An error occurred', code = null) => ({
   ...(code && { code }),
 });
 
-module.exports = { success, error };
+const successResponse = (res, message, data = {}, statusCode = 200) => {
+  return res.status(statusCode).json({
+    success: true,
+    message,
+    data,
+  });
+};
+
+const errorResponse = (res, message, statusCode = 400) => {
+  return res.status(statusCode).json({
+    success: false,
+    message,
+  });
+};
+
+module.exports = { success, error, successResponse, errorResponse };

@@ -11,10 +11,10 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/health', (req, res) => res.json({ status: 'ok', app: 'EventFi API', version: '1.0.0' }));
 
 // ─── Routes ──────────────────────────────────────────────────
-app.use('/api/auth',   require('./routes/auth.routes'));    // ✅ Phase 1
-app.use('/api/events', require('./routes/event.routes'));   // ✅ Phase 2
-// Phase 4:  app.use('/api/bookings',      require('./routes/booking.routes'));
-// Phase 4:  app.use('/api/coupons',       require('./routes/coupon.routes'));
+app.use('/api/auth',     require('./routes/auth.routes'));     // ✅ Phase 1
+app.use('/api/events',   require('./routes/event.routes'));    // ✅ Phase 2
+app.use('/api/bookings', require('./routes/booking.routes'));  // ✅ Phase 4
+app.use('/api/coupons',  require('./routes/coupon.routes'));   // ✅ Phase 4
 // Phase 5:  app.use('/api/points',        require('./routes/points.routes'));
 // Phase 6:  app.use('/api/reviews',       require('./routes/review.routes'));
 // Phase 6:  app.use('/api/notifications', require('./routes/notification.routes'));

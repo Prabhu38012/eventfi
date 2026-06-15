@@ -287,7 +287,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: event.hasSeatsLeft
-                      ? () => context.push('/book/${event.id}')
+                      ? () => context.push('/book/${event.id}', extra: {'event': event})
                       : null,
                   child: Text(
                     event.hasSeatsLeft ? 'Book Now' : 'Sold Out',
