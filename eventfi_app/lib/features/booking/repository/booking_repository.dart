@@ -20,7 +20,10 @@ class BookingRepository {
         'couponCode': couponCode,
       },
     );
-    return res.data as Map<String, dynamic>;
+    return {
+      'message': res.data['message'],
+      ...res.data['data'],
+    };
   }
 
   /// Step 2 — Verify payment + create booking
@@ -49,7 +52,10 @@ class BookingRepository {
         'couponCode':        couponCode,
       },
     );
-    return res.data as Map<String, dynamic>;
+    return {
+      'message': res.data['message'],
+      ...res.data['data'],
+    };
   }
 
   /// Validate a coupon code
@@ -61,13 +67,16 @@ class BookingRepository {
       '/coupons/validate',
       data: {'code': code, 'amount': amount},
     );
-    return res.data as Map<String, dynamic>;
+    return {
+      'message': res.data['message'],
+      ...res.data['data'],
+    };
   }
 
   /// Get logged-in user's bookings
   Future<List<BookingModel>> getMyBookings() async {
     final res = await _dio.get(ApiEndpoints.myBookings);
-    return (res.data['bookings'] as List)
+    return (res.data['data']['bookings'] as List)
         .map((b) => BookingModel.fromJson(b))
         .toList();
   }
@@ -75,7 +84,7 @@ class BookingRepository {
   /// Get single booking by ID
   Future<BookingModel> getBookingById(String id) async {
     final res = await _dio.get('/bookings/$id');
-    return BookingModel.fromJson(res.data['booking']);
+    return BookingModel.fromJson(res.data['data']['booking']);
   }
 
   /// Cancel booking

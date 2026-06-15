@@ -232,22 +232,31 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   const Divider(color: AppColors.divider),
                   const SizedBox(height: 20),
 
-                  // Reviews placeholder
+                   // Reviews — navigates to Phase 6 reviews screen
                   Text('Reviews', style: AppFonts.headlineSmall),
                   const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.all(AppSizes.lg),
-                    decoration: BoxDecoration(
-                      color:        AppColors.surface1,
-                      borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+                  GestureDetector(
+                    onTap: () => context.push(
+                      '/reviews/${event.id}',
+                      extra: {'title': event.title},
                     ),
-                    child: Row(children: [
-                      const Icon(Icons.star_border_rounded,
-                          color: AppColors.textSecondary, size: 20),
-                      const SizedBox(width: 10),
-                      Text('Reviews coming in Phase 6',
-                          style: AppFonts.bodySmall),
-                    ]),
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSizes.cardPadding),
+                      decoration: BoxDecoration(
+                        color:        AppColors.surface1,
+                        borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+                        border:       Border.all(color: AppColors.border, width: 0.5),
+                      ),
+                      child: Row(children: [
+                        const Icon(Icons.star_rounded, color: AppColors.gold, size: 20),
+                        const SizedBox(width: 10),
+                        Text('See Reviews & Ratings',
+                            style: AppFonts.labelMedium),
+                        const Spacer(),
+                        const Icon(Icons.chevron_right_rounded,
+                            color: AppColors.textSecondary, size: 20),
+                      ]),
+                    ),
                   ),
 
                   // Padding for sticky bottom bar

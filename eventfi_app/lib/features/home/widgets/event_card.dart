@@ -1,18 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_fonts.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../events/models/event_model.dart';
+import '../../wishlist/providers/wishlist_provider.dart';
 
 class EventCard extends StatelessWidget {
   final EventModel event;
-
   const EventCard({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
+    final wp     = context.watch<WishlistProvider>();
+    final saved  = wp.isSaved(event.id);
+
     return GestureDetector(
       onTap: () => context.push('/event/${event.id}'),
       child: Container(
@@ -24,21 +28,16 @@ class EventCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            // ─── Image / Banner ────────────────────────
+            // ── Image ───────────────────────────────────
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(AppSizes.radiusLg),
-              ),
+                  top: Radius.circular(AppSizes.radiusLg)),
               child: Stack(
                 children: [
-                  // Image
                   SizedBox(
-                    height: AppSizes.cardImgHeight,
-                    width:  double.infinity,
+                    height: AppSizes.cardImgHeight, width: double.infinity,
                     child:  _buildImage(),
                   ),
-
                   // Category badge
                   Positioned(
                     top: 10, left: 10,
@@ -48,65 +47,53 @@ class EventCard extends StatelessWidget {
                         color:        AppColors.dark.withOpacity(0.75),
                         borderRadius: BorderRadius.circular(AppSizes.radiusFull),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(event.categoryIcon, size: 11, color: event.categoryColor),
-                          const SizedBox(width: 4),
-                          Text(event.categoryLabel,
-                              style: AppFonts.badgeText.copyWith(
-                                  color: event.categoryColor, fontSize: 11)),
-                        ],
-                      ),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(event.categoryIcon, size: 11, color: event.categoryColor),
+                        const SizedBox(width: 4),
+                        Text(event.categoryLabel,
+                            style: AppFonts.badgeText
+                                .copyWith(color: event.categoryColor, fontSize: 11)),
+                      ]),
                     ),
                   ),
-
-                  // Wishlist button
+                  // Wishlist heart ✅ connected to WishlistProvider
                   Positioned(
                     top: 4, right: 4,
                     child: IconButton(
-                      icon: const Icon(Icons.favorite_border_rounded,
-                          color: Colors.white, size: 20),
-                      onPressed: () {
-                        // Phase 6: connect to wishlist
-                      },
+                      icon: Icon(
+                        saved
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        color: saved ? Colors.redAccent : Colors.white,
+                        size:  20,
+                      ),
+                      onPressed: () => wp.toggle(event.id),
                     ),
                   ),
                 ],
               ),
             ),
 
-            // ─── Details ───────────────────────────────
+            // ── Details ─────────────────────────────────
             Padding(
               padding: const EdgeInsets.all(AppSizes.cardPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    event.title,
-                    style: AppFonts.cardTitle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(event.title, style: AppFonts.cardTitle,
+                      maxLines: 1, overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 5),
-
-                  // Venue
                   Row(children: [
                     const Icon(Icons.location_on_outlined,
                         size: 13, color: AppColors.textHint),
                     const SizedBox(width: 3),
                     Expanded(
-                      child: Text(
-                        '${event.venue}, ${event.city}',
-                        style: AppFonts.caption,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      child: Text('${event.venue}, ${event.city}',
+                          style: AppFonts.caption, maxLines: 1,
+                          overflow: TextOverflow.ellipsis),
                     ),
                   ]),
                   const SizedBox(height: 3),
-
-                  // Date + time
                   Row(children: [
                     const Icon(Icons.calendar_today_outlined,
                         size: 13, color: AppColors.textHint),
@@ -118,22 +105,16 @@ class EventCard extends StatelessWidget {
                     const SizedBox(width: 3),
                     Text(event.time, style: AppFonts.caption),
                   ]),
-
                   const SizedBox(height: 10),
-
-                  // Price + Book button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(event.priceDisplay, style: AppFonts.priceText),
-                          Text(event.seatsLabel,
-                              style: AppFonts.caption.copyWith(
-                                  color: event.seatsColor)),
-                        ],
-                      ),
+                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text(event.priceDisplay, style: AppFonts.priceText),
+                        Text(event.seatsLabel,
+                            style: AppFonts.caption
+                                .copyWith(color: event.seatsColor)),
+                      ]),
                       SizedBox(
                         height: 34,
                         child: ElevatedButton(
@@ -141,13 +122,10 @@ class EventCard extends StatelessWidget {
                               ? () => context.push('/event/${event.id}')
                               : null,
                           style: ElevatedButton.styleFrom(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 18),
-                            minimumSize: Size.zero,
-                          ),
+                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              minimumSize: Size.zero),
                           child: Text('Book',
-                              style: AppFonts.buttonText
-                                  .copyWith(fontSize: 13)),
+                              style: AppFonts.buttonText.copyWith(fontSize: 13)),
                         ),
                       ),
                     ],
@@ -164,10 +142,10 @@ class EventCard extends StatelessWidget {
   Widget _buildImage() {
     if (event.posterUrl != null && event.posterUrl!.isNotEmpty) {
       return CachedNetworkImage(
-        imageUrl:     event.posterUrl!,
-        fit:          BoxFit.cover,
-        placeholder:  (_, __) => _Placeholder(event),
-        errorWidget:  (_, __, ___) => _Placeholder(event),
+        imageUrl:    event.posterUrl!,
+        fit:         BoxFit.cover,
+        placeholder: (_, __) => _Placeholder(event),
+        errorWidget: (_, __, ___) => _Placeholder(event),
       );
     }
     return _Placeholder(event);
@@ -177,18 +155,10 @@ class EventCard extends StatelessWidget {
 class _Placeholder extends StatelessWidget {
   final EventModel event;
   const _Placeholder(this.event);
-
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: event.categoryColor.withOpacity(0.12),
-      child: Center(
-        child: Icon(
-          event.categoryIcon,
-          size:  48,
-          color: event.categoryColor.withOpacity(0.35),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+    color: event.categoryColor.withOpacity(0.12),
+    child: Center(child: Icon(event.categoryIcon,
+        size: 48, color: event.categoryColor.withOpacity(0.35))),
+  );
 }

@@ -11,14 +11,15 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/health', (req, res) => res.json({ status: 'ok', app: 'EventFi API', version: '1.0.0' }));
 
 // ─── Routes ──────────────────────────────────────────────────
-app.use('/api/auth',     require('./routes/auth.routes'));     // ✅ Phase 1
-app.use('/api/events',   require('./routes/event.routes'));    // ✅ Phase 2
-app.use('/api/bookings', require('./routes/booking.routes'));  // ✅ Phase 4
-app.use('/api/coupons',  require('./routes/coupon.routes'));   // ✅ Phase 4
-app.use('/api/points',   require('./routes/points.routes'));   // ✅ Phase 5
-// Phase 6:  app.use('/api/reviews',       require('./routes/review.routes'));
-// Phase 6:  app.use('/api/notifications', require('./routes/notification.routes'));
-// Phase 7:  app.use('/api/admin',         require('./routes/admin.routes'));
+app.use('/api/auth',          require('./routes/auth.routes'));         // ✅ Phase 1
+app.use('/api/events',        require('./routes/event.routes'));        // ✅ Phase 2
+app.use('/api/bookings',      require('./routes/booking.routes'));      // ✅ Phase 4
+app.use('/api/coupons',       require('./routes/coupon.routes'));       // ✅ Phase 4
+app.use('/api/points',        require('./routes/points.routes'));       // ✅ Phase 5
+app.use('/api/wishlist',      require('./routes/wishlist.routes'));     // ✅ Phase 6
+app.use('/api/reviews',       require('./routes/review.routes'));       // ✅ Phase 6
+app.use('/api/notifications', require('./routes/notification.routes'));// ✅ Phase 6
+// Phase 7:  app.use('/api/admin', require('./routes/admin.routes'));
 
 app.use((req, res) => res.status(404).json({ success: false, message: 'Route not found' }));
 app.use((err, req, res, next) => {

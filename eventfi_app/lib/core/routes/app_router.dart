@@ -18,6 +18,10 @@ import '../../features/booking/screens/ticket_screen.dart';
 import '../../features/booking/models/booking_model.dart';
 import '../../features/points/screens/points_screen.dart';
 import '../../features/points/screens/rewards_screen.dart';
+import '../../features/wishlist/screens/wishlist_screen.dart';
+import '../../features/reviews/screens/reviews_screen.dart';
+import '../../features/reviews/providers/review_provider.dart';
+import '../../features/notifications/screens/notifications_screen.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_fonts.dart';
 
@@ -26,18 +30,15 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
 
-    // ─── Auth ─────────────────────────────────────────────
     GoRoute(path: '/',            builder: (_, __) => const SplashScreen()),
     GoRoute(path: '/onboarding',  builder: (_, __) => const OnboardingScreen()),
     GoRoute(path: '/login',       builder: (_, __) => const LoginScreen()),
     GoRoute(path: '/signup',      builder: (_, __) => const SignupScreen()),
     GoRoute(path: '/forgot-password', builder: (_, __) => const ForgotPasswordScreen()),
     GoRoute(path: '/otp',         builder: (_, __) => const OtpScreen()),
+    GoRoute(path: '/home',        builder: (_, __) => const HomeScreen()),
 
-    // ─── Home ─────────────────────────────────────────────
-    GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
-
-    // ─── Event Detail — Phase 3 ───────────────────────────
+    // Phase 3
     GoRoute(
       path: '/event/:id',
       builder: (_, state) => ChangeNotifierProvider(
@@ -46,53 +47,55 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
 
-    // ─── Booking — Phase 4 ────────────────────────────────
-    GoRoute(
-      path: '/book/:id',
-      builder: (_, state) {
-        final event = (state.extra as Map?)?['event'];
-        if (event == null) return _Ph('Seat Selection', 'Pass event via extra');
-        return SeatSelectionScreen(event: event);
-      },
-    ),
-    GoRoute(
-      path: '/checkout',
-      builder: (_, state) {
-        final event = (state.extra as Map?)?['event'];
-        if (event == null) return _Ph('Checkout', 'Pass event via extra');
-        return CheckoutScreen(event: event);
-      },
-    ),
-    GoRoute(
-      path: '/confirmed',
-      builder: (_, state) {
-        final booking = state.extra as BookingModel?;
-        if (booking == null) return _Ph('Confirmed', 'No booking data');
-        return BookingConfirmedScreen(booking: booking);
-      },
-    ),
-    GoRoute(path: '/bookings',    builder: (_, __) => const BookingHistoryScreen()),
-    GoRoute(path: '/ticket/:id',  builder: (_, state) =>
+    // Phase 4
+    GoRoute(path: '/book/:id',
+        builder: (_, state) {
+          final e = (state.extra as Map?)?['event'];
+          return e == null ? _Ph('Seat Selection','') : SeatSelectionScreen(event: e);
+        }),
+    GoRoute(path: '/checkout',
+        builder: (_, state) {
+          final e = (state.extra as Map?)?['event'];
+          return e == null ? _Ph('Checkout','') : CheckoutScreen(event: e);
+        }),
+    GoRoute(path: '/confirmed',
+        builder: (_, state) {
+          final b = state.extra as BookingModel?;
+          return b == null ? _Ph('Confirmed','') : BookingConfirmedScreen(booking: b);
+        }),
+    GoRoute(path: '/bookings',   builder: (_, __) => const BookingHistoryScreen()),
+    GoRoute(path: '/ticket/:id', builder: (_, state) =>
         TicketScreen(bookingId: state.pathParameters['id'] ?? '')),
 
-    // ─── Points & Rewards — Phase 5 ───────────────────────
+    // Phase 5
     GoRoute(path: '/points',  builder: (_, __) => const PointsScreen()),
     GoRoute(path: '/rewards', builder: (_, __) => const RewardsScreen()),
 
-    // ─── Upcoming ─────────────────────────────────────────
-    GoRoute(path: '/wishlist',      builder: (_, __) => _Ph('Wishlist',      'Phase 6')),
-    GoRoute(path: '/reviews/:id',   builder: (_, __) => _Ph('Reviews',       'Phase 6')),
-    GoRoute(path: '/notifications', builder: (_, __) => _Ph('Notifications', 'Phase 6')),
-    GoRoute(path: '/profile',       builder: (_, __) => _Ph('Profile',       'Phase 6')),
-    GoRoute(path: '/search',        builder: (_, __) => _Ph('AI Search',     'Phase 8')),
-    GoRoute(path: '/admin',         builder: (_, __) => _Ph('Admin',         'Phase 7')),
+    // Phase 6 ✅
+    GoRoute(path: '/wishlist', builder: (_, __) => const WishlistScreen()),
+    GoRoute(
+      path: '/reviews/:eventId',
+      builder: (_, state) {
+        final eventId    = state.pathParameters['eventId'] ?? '';
+        final eventTitle = (state.extra as Map?)?['title'] as String? ?? 'Event';
+        return ChangeNotifierProvider(
+          create: (_) => ReviewProvider(),
+          child:  ReviewsScreen(eventId: eventId, eventTitle: eventTitle),
+        );
+      },
+    ),
+    GoRoute(path: '/notifications', builder: (_, __) => const NotificationsScreen()),
+
+    // Upcoming
+    GoRoute(path: '/profile', builder: (_, __) => _Ph('Profile',     'Phase 7')),
+    GoRoute(path: '/search',  builder: (_, __) => _Ph('AI Search',   'Phase 8')),
+    GoRoute(path: '/admin',   builder: (_, __) => _Ph('Admin',       'Phase 7')),
   ],
 );
 
 class _Ph extends StatelessWidget {
   final String title, phase;
   const _Ph(this.title, this.phase);
-
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: AppColors.dark,
@@ -107,9 +110,11 @@ class _Ph extends StatelessWidget {
     body: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       const Text('🚧', style: TextStyle(fontSize: 56)),
       const SizedBox(height: 20),
-      Text(title, style: AppFonts.headlineSmall),
-      const SizedBox(height: 8),
-      Text('Coming in $phase', style: AppFonts.bodySmall),
+      Text(title,  style: AppFonts.headlineSmall),
+      if (phase.isNotEmpty) ...[
+        const SizedBox(height: 8),
+        Text('Coming in $phase', style: AppFonts.bodySmall),
+      ],
     ])),
   );
 }
