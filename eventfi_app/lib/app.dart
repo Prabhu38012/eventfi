@@ -20,9 +20,10 @@ class EventFiApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => BookingProvider()),
         ChangeNotifierProvider(create: (_) => PointsProvider()),
-        ChangeNotifierProvider(create: (_) => WishlistProvider()),        // ✅ Phase 6
-        ChangeNotifierProvider(create: (_) => NotificationProvider()),    // ✅ Phase 6
-        // Phase 7: ChangeNotifierProvider(create: (_) => AdminProvider()),
+        ChangeNotifierProvider(create: (_) => WishlistProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        // Note: AdminProvider is created locally per admin screen
+        // to avoid loading admin data for regular users
       ],
       child: MaterialApp.router(
         title:                      'EventFi',

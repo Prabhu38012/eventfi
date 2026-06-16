@@ -102,7 +102,7 @@ class BookingProvider extends ChangeNotifier {
     _couponLoading = true; notifyListeners();
     try {
       final res = await _repo.validateCoupon(code: code, amount: baseAmount);
-      _discount      = (res['data']['discount'] ?? 0).toDouble();
+      _discount      = (res['discount'] ?? 0).toDouble();
       _couponCode    = code;
       _couponMessage = res['message'];
       _couponValid   = true;
@@ -150,8 +150,8 @@ class BookingProvider extends ChangeNotifier {
         seats:      _selectedSeats,
         couponCode: _couponCode,
       );
-      _razorpayOrderId = res['data']['orderId'];
-      _razorpayKeyId   = res['data']['keyId'];
+      _razorpayOrderId = res['orderId']  as String?;
+      _razorpayKeyId   = res['keyId']    as String?;
       _creatingOrder   = false;
       notifyListeners();
 
@@ -225,8 +225,8 @@ class BookingProvider extends ChangeNotifier {
         finalAmount:       _pendingFinalAmount ?? finalAmount,
         couponCode:        _pendingCouponCode ?? _couponCode,
       );
-      _booking      = BookingModel.fromJson(res['data']['booking']);
-      _pointsEarned = res['data']['pointsEarned'] ?? 0;
+      _booking      = BookingModel.fromJson(res['booking']);
+      _pointsEarned = (res['pointsEarned'] ?? 0) as int;
       _confirmed    = true;
     } catch (e) {
       _error = _parseError(e);

@@ -26,7 +26,6 @@ class BookingRepository {
     };
   }
 
-  /// Step 2 — Verify payment + create booking
   Future<Map<String, dynamic>> verifyAndBook({
     required String razorpayOrderId,
     required String razorpayPaymentId,

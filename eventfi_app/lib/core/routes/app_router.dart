@@ -22,6 +22,13 @@ import '../../features/wishlist/screens/wishlist_screen.dart';
 import '../../features/reviews/screens/reviews_screen.dart';
 import '../../features/reviews/providers/review_provider.dart';
 import '../../features/notifications/screens/notifications_screen.dart';
+import '../../features/admin/screens/admin_dashboard_screen.dart';
+import '../../features/admin/screens/admin_events_screen.dart';
+import '../../features/admin/screens/admin_event_form_screen.dart';
+import '../../features/admin/screens/admin_bookings_screen.dart';
+import '../../features/admin/screens/admin_coupons_screen.dart';
+import '../../features/admin/screens/admin_qr_scanner_screen.dart';
+import '../../features/admin/providers/admin_provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_fonts.dart';
 
@@ -30,6 +37,7 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
 
+    // ── Auth ──────────────────────────────────────────────
     GoRoute(path: '/',            builder: (_, __) => const SplashScreen()),
     GoRoute(path: '/onboarding',  builder: (_, __) => const OnboardingScreen()),
     GoRoute(path: '/login',       builder: (_, __) => const LoginScreen()),
@@ -38,7 +46,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/otp',         builder: (_, __) => const OtpScreen()),
     GoRoute(path: '/home',        builder: (_, __) => const HomeScreen()),
 
-    // Phase 3
+    // ── Events ────────────────────────────────────────────
     GoRoute(
       path: '/event/:id',
       builder: (_, state) => ChangeNotifierProvider(
@@ -47,7 +55,7 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
 
-    // Phase 4
+    // ── Booking ───────────────────────────────────────────
     GoRoute(path: '/book/:id',
         builder: (_, state) {
           final e = (state.extra as Map?)?['event'];
@@ -67,11 +75,11 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/ticket/:id', builder: (_, state) =>
         TicketScreen(bookingId: state.pathParameters['id'] ?? '')),
 
-    // Phase 5
+    // ── Points ────────────────────────────────────────────
     GoRoute(path: '/points',  builder: (_, __) => const PointsScreen()),
     GoRoute(path: '/rewards', builder: (_, __) => const RewardsScreen()),
 
-    // Phase 6 ✅
+    // ── Engagement ────────────────────────────────────────
     GoRoute(path: '/wishlist', builder: (_, __) => const WishlistScreen()),
     GoRoute(
       path: '/reviews/:eventId',
@@ -85,11 +93,61 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(path: '/notifications', builder: (_, __) => const NotificationsScreen()),
+    GoRoute(path: '/profile',       builder: (_, __) => _Ph('Profile', 'Phase 8')),
+    GoRoute(path: '/search',        builder: (_, __) => _Ph('AI Search', 'Phase 8')),
 
-    // Upcoming
-    GoRoute(path: '/profile', builder: (_, __) => _Ph('Profile',     'Phase 7')),
-    GoRoute(path: '/search',  builder: (_, __) => _Ph('AI Search',   'Phase 8')),
-    GoRoute(path: '/admin',   builder: (_, __) => _Ph('Admin',       'Phase 7')),
+    // ── Admin ── Phase 7 ──────────────────────────────────
+    GoRoute(
+      path: '/admin',
+      builder: (_, __) => ChangeNotifierProvider(
+        create: (_) => AdminProvider(),
+        child:  const AdminDashboardScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/events',
+      builder: (_, __) => ChangeNotifierProvider(
+        create: (_) => AdminProvider(),
+        child:  const AdminEventsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/events/new',
+      builder: (_, __) => ChangeNotifierProvider(
+        create: (_) => AdminProvider(),
+        child:  const AdminEventFormScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/events/edit',
+      builder: (_, state) => ChangeNotifierProvider(
+        create: (_) => AdminProvider(),
+        child:  AdminEventFormScreen(
+          event: state.extra as Map<String, dynamic>?,
+        ),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/bookings',
+      builder: (_, __) => ChangeNotifierProvider(
+        create: (_) => AdminProvider(),
+        child:  const AdminBookingsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/coupons',
+      builder: (_, __) => ChangeNotifierProvider(
+        create: (_) => AdminProvider(),
+        child:  const AdminCouponsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/scanner',
+      builder: (_, __) => ChangeNotifierProvider(
+        create: (_) => AdminProvider(),
+        child:  const AdminQrScannerScreen(),
+      ),
+    ),
   ],
 );
 
